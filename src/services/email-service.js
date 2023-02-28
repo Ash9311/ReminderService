@@ -9,7 +9,7 @@ const sendBasicEmail = async (mailFrom,mailTo,mailSubject,mailBody) => {
             subject: mailSubject,
             text: mailBody
         });
-        console.log(response);
+        //console.log(response);
     } catch (error) {
         console.log(error);
     }
@@ -19,6 +19,7 @@ const fetchPendingEmails = async (timestamp) => {
     try {
        
         const response = await repo.get({status:"PENDING"});
+       // console.log(response);
         return response;
     } catch (error) {
         console.log(error);
@@ -43,10 +44,27 @@ const createNotification = async(data) => {
     }
 }
 
+const subscribeEvents = async(payload) => {
+    let service = data.service;
+    let data = payload.data;
+    switch(service){
+        case 'CREATE_TICKET':
+            await createNotification(data);
+            break;
+        
+        case 'SEND_BASIC_MAIL':
+                 await sendBasicEmail(data);
+                 break;
+        default:
+            console.log('No valid event received');
+            break;
+    }
+}
 
 module.exports = {
     sendBasicEmail,
     fetchPendingEmails,
     createNotification,
-    updateTicket
+    updateTicket,
+    subscribeEvents
 }

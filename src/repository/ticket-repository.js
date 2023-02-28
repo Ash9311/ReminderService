@@ -40,7 +40,7 @@ class TicketRepository{
             const ticket = await NotificationTicket.findByPk(ticketId);
             if(data.status){
                 ticket.status = data.status;
-                console.log(data.status);
+                //console.log(data.status);
             }
             await ticket.save();
             return ticket;
